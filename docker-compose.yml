@@ -1,0 +1,40 @@
+---
+version: "2"
+services:
+  bookstack:
+    image: chenwaichung/bookstack
+    build: .
+    container_name: bookstack
+    environment:
+      - LANG=C.UTF-8
+      - LANGUAGE=zh_CN:zh
+      - LC_ALL=zh_CN.UTF-8
+      - APP_LANG=zh_CN
+      - PUID=1000
+      - PGID=1000
+      - DB_HOST=bookstack_db
+      - DB_USER=bookstack
+      - DB_PASS=Apd4jGBXkYxdrdovTD
+      - DB_DATABASE=bookstackapp
+    volumes:
+      - ./data/bookstack:/config
+    ports:
+      - 6880:80
+    restart: unless-stopped
+    depends_on:
+      - bookstack_db
+  bookstack_db:
+    image: mysql:5.5
+    container_name: bookstack_db
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ROOT_PASSWORD=Apd4jGBXkYxdrdovTD
+      - TZ=Asia/Shanghai
+      - MYSQL_DATABASE=bookstackapp
+      - MYSQL_USER=bookstack
+      - MYSQL_PASSWORD=Apd4jGBXkYxdrdovTD
+    volumes:
+      - ./data/db/data:/var/lib/mysql
+      - ./data/db/config:/etc/mysql/conf.d
+    restart: unless-stopped
